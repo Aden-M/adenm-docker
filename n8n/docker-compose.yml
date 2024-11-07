@@ -1,0 +1,37 @@
+services:
+  n8n:
+      image: docker.n8n.io/n8nio/n8n
+      user: 1000:1000  # ONLY FOR TESTING, DO NOT RUN WITH USER WHO HAS SUDO PRIVELEGES
+      restart: always
+      networks:
+        - proxy
+      ports:
+        - "127.0.0.1:5678:5678"
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.n8n.rule=Host(`n8n.mydomain.com`)
+        - traefik.http.routers.n8n.tls=true
+        - traefik.http.routers.n8n.entrypoints=http,https
+        - traefik.http.routers.n8n.tls.certresolver=mytlschallenge
+        - traefik.http.middlewares.n8n.headers.SSLRedirect=true
+        - traefik.http.middlewares.n8n.headers.STSSeconds=315360000
+        - traefik.http.middlewares.n8n.headers.browserXSSFilter=true
+        - traefik.http.middlewares.n8n.headers.contentTypeNosniff=true
+        - traefik.http.middlewares.n8n.headers.forceSTSHeader=true
+        - traefik.http.middlewares.n8n.headers.SSLHost=n8n.mydomain.com
+        - traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true
+        - traefik.http.middlewares.n8n.headers.STSPreload=true
+        - traefik.http.routers.n8n.middlewares=n8n@docker
+      environment:
+        - N8N_HOST=n8n.mydomain.com
+        - N8N_PORT=5678
+        - N8N_PROTOCOL=https
+        - NODE_ENV=production
+        - WEBHOOK_URL=https://n8n.mydomain.com/
+        - GENERIC_TIMEZONE=America/Chicago
+      volumes:
+        - ./data:/home/node/.n8n
+
+networks:
+  proxy:  # Whatever traefik is running on, put here.
+   external: true 
