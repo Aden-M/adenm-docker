@@ -1,17 +1,12 @@
 services:
   telegraf:
+    user: telegraf:${docker_gid}
     image: telegraf
     container_name: telegraf
     restart: always
     volumes:
       - ./data/telegraf.conf:/etc/telegraf/telegraf.conf:ro  # Mount the Telegraf configuration file
       - /var/run/docker.sock:/var/run/docker.sock:ro  # Mount the Docker socket to collect Docker metrics
-    depends_on:
-      - influxdb
-      - nginx
-    links:
-      - influxdb
-      - nginx
     ports:
       - '8125:8125'  # Expose Telegraf's StatsD port
     networks:
