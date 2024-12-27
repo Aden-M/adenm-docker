@@ -1,0 +1,16 @@
+services:
+  telegraf:
+    user: telegraf:${docker_gid}
+    image: telegraf
+    container_name: telegraf
+    restart: always
+    volumes:
+      - ./data/telegraf.conf:/etc/telegraf/telegraf.conf:ro  # Mount the Telegraf configuration file
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Mount the Docker socket to collect Docker metrics
+    ports:
+      - '8125:8125'  # Expose Telegraf's StatsD port
+    networks:
+      - monitoring  # Connect the Telegraf container to the monitoring network
+networks:
+  monitoring:
+    external: true  # Use an external network named 'monitoring'
