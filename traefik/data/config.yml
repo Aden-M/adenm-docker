@@ -1,0 +1,80 @@
+http:
+ #Routers
+  routers:
+    truenas:
+      entryPoints:
+        - "https"
+      rule: "Host(`truenas.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: truenas
+
+    proxmox:
+      entryPoints:
+        - "https"
+      rule: "Host(`proxmox.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox
+
+    ubiquiti:
+      entryPoints:
+        - "https"
+      rule: "Host(`proxmox.local.example.com`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: ubiquiti
+      
+
+    
+# Services, each router will point to some service.
+  services:
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.19"  # <---- IP Address for the service.
+        passHostHeader: true
+        
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.10:8006"  # <----- You can even add ports for convenience.
+        passHostHeader: true
+
+    ubiquiti:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.1"  
+        passHostHeader: true
+    
+  middlewares:
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.1.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+  
