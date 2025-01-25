@@ -7,14 +7,14 @@
 
 # List of users
 users:
-  adenmann:
+  user1:
     displayname: "Myuser"
     password: "passwd hash"
     email: myself@mydomain.com
     groups:
       - admins
       - dev
-  litamann:
+  user2:
     displayname: "ExampleUser"
     password: "passwd hash"
     email: themself@mydomain.com
