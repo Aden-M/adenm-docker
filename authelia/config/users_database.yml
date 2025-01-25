@@ -9,7 +9,6 @@
 users:
   adenmann:
     displayname: "Myuser"
-    # Password is Authelia retwyw-tecSup-3jidjy
     password: "passwd hash"
     email: myself@mydomain.com
     groups:
@@ -17,7 +16,6 @@ users:
       - dev
   litamann:
     displayname: "ExampleUser"
-    # Password is Authelia retwyw-tecSup-3jidjy
     password: "passwd hash"
     email: themself@mydomain.com
     groups:
