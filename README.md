@@ -1,20 +1,20 @@
-This is the current public repository for all of my docker compose containers.
-This is an integrated and functional stack and currently aims to provide TCP routing and TLS connections
-for any number of scalable backend services by leveraging Traefik dynamic container labels and static TCP 
-routing, with Authelia as a SSO middleware.
+**Public Repository for Docker Compose Containers**
+This repository contains my publicly available Docker Compose stack, designed to provide scalable TCP routing and TLS connections for various backend services. The stack leverages Traefik’s dynamic container labels and static TCP routing, with Authentik (replacing Authelia) as the SSO middleware.
 
-The included containers, and a short summary of their function are as follows:
+**Included Containers and Their Functions:**
 
-Traefik - This is one of the best reverse proxy docker containers, it is incredibly flexible and scalable, and provides convenient and extensive SSL termination for docker containers, services running over TCP, and also allows for middlewares to add integrated authentication in front of containers.
+**Traefik** – A highly flexible and scalable reverse proxy container, offering extensive SSL termination for Docker containers and TCP services. It also supports middleware integration for authentication.
 
-Authelia - This is a simple SSO provider that is convenient to set up and is easy to scale, it runs as its own container and can be added as a static middleware or dynamic label.
+**Authentik** – An enterprise-grade Single Sign-On (SSO) service, enabling scalable user enrollment, multiple authentication providers (e.g., OAuth, proxies), and direct backend integration for secure applications.
 
-Prometheus - This is a data collection container and collects data regarding the host system or docker environment through cadvisor and nodeexporter. Currently, it is set up to monitor Traefik only.
+**Authelia** – A lightweight SSO provider that is easy to deploy and scale. It operates as a standalone container and can be integrated as either a static middleware or a dynamic label. (Currently being phased out in favor of Authentik.)
 
-Grafana - This is a data visualization service and runs as a docker container, it can integrate with a variety of data providers. In this repository it connects with Prometheus to provide data regarding the Traefik service and container.
+**Prometheus** – A monitoring and data collection container that gathers system metrics through cAdvisor and Node Exporter. In this setup, it primarily monitors Traefik.
 
-Other containers:
-I have not yet configured chronograf, influxDB, or n8n to a functional and useful state.
+**Grafana** – A data visualization tool that connects to Prometheus to provide insights into Traefik’s performance and container activity.
 
-
-
+**Additional Containers (Work in Progress):**
+- Chronograf, InfluxDB, and n8n have not yet been fully configured for functionality.
+- Authelia is currently being replaced with Authentik.
+- Some services may require additional research or troubleshooting to ensure full functionality.
+- Guides and documentation are available for all of these services.
