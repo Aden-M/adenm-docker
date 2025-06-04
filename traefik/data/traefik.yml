@@ -2,40 +2,42 @@ log:
   level: DEBUG
   filepath: /etc/traefik.log
 
-api:
+api:  # Set up dashboard for view.
   dashboard: true
   debug: true
 
 entryPoints:
-  http:
-    address: ":80"  # OPEN THIS ON YOUR UFW OR MACHINE - MUST BE PORT-FORWARDED
+  http:  # Websecure redirect
+    address: ":80"
     http:
       redirections:
         entryPoint:
           to: https
           scheme: https
-  https:
-    address: ":443"  # OPEN THIS ON YOUR UFW OR MACHINE - MUST BE PORT-FORWARDED
-  metrics:
-    address: ":8082"  # DO NOT OPEN THIS ON YOUR UFW OR MACHINE
+  https:  # Websecure entrypoint
+    address: ":443"
+
+  metrics:  # Metric for prometheus!
+    address: ":8082"  
 
 serversTransport:
   insecureSkipVerify: true
-  
+
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
   file:
-    filename: /config.yml
+    directory: "/middlewares"
+    watch: true
 
 certificatesResolvers:
   cloudflare:
     acme:
-      email: youremail
+      email: youremail@gmail.com
       storage: acme.json
       dnsChallenge:
-        provider: cloudflare  # cloudflare works consistently well for this - port 80 must be open!
+        provider: cloudflare
         #disablePropagationCheck: true # uncomment this if you have issues pulling certificates through cloudflare, By setting this flag to true disables the need to wait for the propagation of the TXT record to all authoritative name servers.
         resolvers:
           - "1.1.1.1:53"

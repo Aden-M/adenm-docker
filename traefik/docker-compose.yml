@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   traefik:
     image: traefik:latest
@@ -11,7 +9,6 @@ services:
       - proxy
       - monitoring
     ports:
-      - 80:80
       - 443:443
     env_file:
       - ./data/secrets.env
@@ -21,12 +18,13 @@ services:
       - ./data/traefik.yml:/traefik.yml:ro
       - ./data/acme.json:/acme.json  #chmod 600!
       - ./data/config.yml:/config.yml:ro
-      - ./data/traefik.log:/traefik.log
+      - ./data/traefik.log:/etc/traefik.log
+      - ./data/middlewares:/rules
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`traefik.mydomain.com`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=testuser:$$apr1$$gx1rby0o$$g9WSrgGSTqiWamEYVr6xA1"  #password is test1234 for testing, normally will not run when authelia is defined below.
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=testuser:$$apr1$$gx1rby0o$$g9WSrgGSTqiWamEYVr6xA1"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
@@ -47,5 +45,7 @@ networks:
     name: monitoring
     external: true
 
-##10/26/2024
-## Aden Mann docker-compose.yaml for Public Release
+
+## 06/03/2025
+## Aden Mann docker-compose.yml for Traefik public release
+

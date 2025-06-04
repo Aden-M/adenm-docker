@@ -4,25 +4,16 @@ http:
     truenas:
       entryPoints:
         - "https"
-      rule: "Host(`truenas.local.adenm.solutions`)"
+      rule: "Host(`truenas.mydomain.com`)"
       middlewares:
         - default-headers
       tls: {}
       service: truenas
 
-    projectsend:
-      entryPoints:
-        - "https"
-      rule: "Host(`projectsend.local.adenm.solutions`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: projectsend
-
     proxmox:
       entryPoints:
         - "https"
-      rule: "Host(`proxmox.local.adenm.solutions`)"
+      rule: "Host(`proxmox.mydomain.com`)"
       middlewares:
         - default-headers
       tls: {}
@@ -31,65 +22,29 @@ http:
     ubiquiti:
       entryPoints:
         - "https"
-      rule: "Host(`unifi.local.adenm.solutions`)"
+      rule: "Host(`unifi.mydomain.com`)"
       middlewares:
         - default-headers
       tls: {}
       service: ubiquiti
-    
-    pterodactyl:
-      entryPoints:
-        - "https"
-      rule: "Host(`pterodactyl.local.adenm.solutions`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: pterodactyl
-
-    wings01:
-      entryPoints:
-        - "https"
-      rule: "Host(`node1.local.adenm.solutions`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: wings01
-      
 
   services:
     truenas:
       loadBalancer:
         servers:
-          - url: "https://192.168.1.19"  
+          - url: "https://192.168.1.2"  
         passHostHeader: true
-    
-    projectsend:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.1.202:80"
 
     proxmox:
       loadBalancer:
         servers:
-          - url: "https://192.168.1.30:8006"  
+          - url: "https://192.168.1.3:8006"  
         passHostHeader: true
 
     ubiquiti:
       loadBalancer:
         servers:
           - url: "https://192.168.1.1"  
-        passHostHeader: true
-
-    pterodactyl:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.1.35:80"  
-        passHostHeader: true
-    
-    wings01:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.1.35:8080"
         passHostHeader: true
 
   middlewares:
