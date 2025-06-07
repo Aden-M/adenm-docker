@@ -12,7 +12,7 @@
 
 services:
   db:
-    image: postgres:16
+    image: pgvector/pgvector16
     container_name: docengine-postgres
     restart: unless-stopped
 
