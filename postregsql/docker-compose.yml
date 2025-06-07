@@ -1,5 +1,4 @@
-# ------------------------------------------------------------------------
-# docker-compose.yml – SARDETS Document Retrieval Engine (PostgreSQL only)
+
 # ------------------------------------------------------------------------
 # This compose file spins up a production‑grade PostgreSQL 16 container with:
 #   • Superuser  ➜  ${POSTGRES_SUPERUSER}
