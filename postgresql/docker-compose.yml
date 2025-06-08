@@ -1,0 +1,77 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> c86a2cc52df841b02ba3ff8dd3acbfe1738ba0b2
+# ------------------------------------------------------------------------
+# This compose file spins up a production‑grade PostgreSQL 16 container with:
+#   • Superuser  ➜  ${POSTGRES_SUPERUSER}
+#   • Least‑privileged app user  ➜  ${APP_USER}
+# Variables live in an adjacent .env file (see template at bottom).
+# An init script in ./docker/initdb.d creates the app user & grants minimal
+# privileges during first‑time cluster init.
+# ------------------------------------------------------------------------
+
+
+services:
+  db:
+<<<<<<< HEAD
+    image: pgvector/pgvector16
+=======
+    image: postgres:16
+>>>>>>> c86a2cc52df841b02ba3ff8dd3acbfe1738ba0b2
+    container_name: docengine-postgres
+    restart: unless-stopped
+
+    # Load credentials from .env (keeps secrets out of VCS)
+    env_file:
+      - .env
+
+    # Explicit for readability / CI scanners
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_SUPERUSER}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERPASS}
+      # Pass through so init script can see them
+      APP_USER: ${APP_USER}
+      APP_PASS: ${APP_PASS}
+
+    volumes:
+      # Durable data
+      - db_data:/var/lib/postgresql/data
+      # Bootstrap scripts (read‑only)
+      - ./docker/initdb.d:/docker-entrypoint-initdb.d:ro
+
+    ports:
+      - "5432:5432"  # host:container – change or remove in production
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_SUPERUSER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+
+# ------------------------------------------------------------------------
+# .env template (create alongside this compose file):
+# ------------------------------------------------------------------------
+# POSTGRES_DB=docengine
+# POSTGRES_SUPERUSER=postgres
+# POSTGRES_SUPERPASS=super_secure_password
+# APP_USER=docengine_app
+# APP_PASS=app_secure_password
+# ------------------------------------------------------------------------
+# After editing .env, create the init script below at ./docker/initdb.d/01-app-user.sh
+# The script runs **once** on first cluster creation.
+# ------------------------------------------------------------------------
+# #!/usr/bin/env bash
+# set -euo pipefail
+# psql -v ON_ERROR_STOP=1 --username "$POSTGRES_SUPERUSER" --dbname "$POSTGRES_DB" <<-EOSQL
+#   CREATE USER "$APP_USER" WITH PASSWORD '$APP_PASS';
+#   GRANT CONNECT ON DATABASE "$POSTGRES_DB" TO "$APP_USER";
+#   GRANT USAGE ON SCHEMA public TO "$APP_USER";
+#   GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO "$APP_USER";
+#   ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO "$APP_USER";
+# EOSQL
+# ------------------------------------------------------------------------
