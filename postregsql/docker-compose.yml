@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> c86a2cc52df841b02ba3ff8dd3acbfe1738ba0b2
 # ------------------------------------------------------------------------
 # This compose file spins up a production‑grade PostgreSQL 16 container with:
 #   • Superuser  ➜  ${POSTGRES_SUPERUSER}
@@ -11,7 +14,11 @@
 
 services:
   db:
+<<<<<<< HEAD
     image: pgvector/pgvector16
+=======
+    image: postgres:16
+>>>>>>> c86a2cc52df841b02ba3ff8dd3acbfe1738ba0b2
     container_name: docengine-postgres
     restart: unless-stopped
 
