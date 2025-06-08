@@ -1,0 +1,39 @@
+
+services:
+  gitlab:
+    image: zengxs/gitlab:latest
+    platform: linux/arm64
+    container_name: gitlab
+    restart: always
+    hostname: gitlab.mydomain.com
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.mydomain.com'
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+    ports:
+      - "2222:22"
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitlab.rule=Host(`gitlab.mydomain.com`)"
+      - "traefik.http.routers.gitlab.entrypoints=https"
+      - "traefik.http.routers.gitlab.tls.certresolver=myresolver"
+      - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+
+volumes:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+
+networks:
+  proxy:
+    external: true
+
+# ARM64 Selfhosted Gitlab community edition
+# 06/08/2025 Aden-M github Public Release 
