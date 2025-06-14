@@ -1,47 +1,17 @@
 http:
  #region routers 
   routers:
-    truenas:
+    service1:
       entryPoints:
         - "https"
-      rule: "Host(`truenas.mydomain.com`)"
+      rule: "Host(`service1.mydomain.com`)"
       middlewares:
         - default-headers
       tls: {}
-      service: truenas
-
-    proxmox:
-      entryPoints:
-        - "https"
-      rule: "Host(`proxmox.mydomain.com`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: proxmox
-
-    ubiquiti:
-      entryPoints:
-        - "https"
-      rule: "Host(`unifi.mydomain.com`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: ubiquiti
+      service: service1
 
   services:
-    truenas:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.1.2"  
-        passHostHeader: true
-
-    proxmox:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.1.3:8006"  
-        passHostHeader: true
-
-    ubiquiti:
+    service1:
       loadBalancer:
         servers:
           - url: "https://192.168.1.1"  
